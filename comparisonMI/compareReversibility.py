@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and generates mixing data and creates figures.
+"""
+
 import comparisonMI.generatePositionData as gpd
 import comparisonMI.wrappers as wp
 import matplotlib.pyplot as plt
@@ -51,8 +62,8 @@ def create_plot_all(Ms, mi_names: str, loc="upper left"):
             cmap_idx = 2 * (i - (len(mi_names_gb) + len(mi_names_cb)))
 
         y = Ms[i, :]
-        
-        axs[axid].plot(x, y, '-', label=f"{mi_name}".upper(), color=cmap(cmap_idx))
+
+        axs[axid].plot(x, y, "-", label=f"{mi_name}".upper(), color=cmap(cmap_idx))
 
     for ax in axs:
         ax.legend(loc=loc)

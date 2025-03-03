@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and generates mixing data and creates figures.
+"""
+
 import comparisonMI.generatePositionData as gpd
 import comparisonMI.wrappers as wp
 import matplotlib.pyplot as plt
@@ -32,18 +43,18 @@ def create_plot_general(x, Y, mi_names, munu=False) -> tuple:
 
     cmap = matplotlib.colormaps["tab20"]
 
-    ref = [1e3,1e6]
+    ref = [1e3, 1e6]
     if munu:
-        axs[0].text(1e3, 100*1e3**(-0.5), r"$10^{2}P^{-1/2}$")
+        axs[0].text(1e3, 100 * 1e3 ** (-0.5), r"$10^{2}P^{-1/2}$")
     else:
-        axs[0].text(1e3, 10*1e3**(-0.5), r"$10^{1}P^{-1/2}$")
-    axs[0].text(1e3, 1e3**(-1.0), r"$P^{-1}$")
+        axs[0].text(1e3, 10 * 1e3 ** (-0.5), r"$10^{1}P^{-1/2}$")
+    axs[0].text(1e3, 1e3 ** (-1.0), r"$P^{-1}$")
     for ax in axs:
         if munu:
-            ax.plot(ref, 100*np.power(ref,-0.5), linewidth=1.0, linestyle='--', color="#595C61", label="_") 
+            ax.plot(ref, 100 * np.power(ref, -0.5), linewidth=1.0, linestyle="--", color="#595C61", label="_")
         else:
-            ax.plot(ref, 10*np.power(ref,-0.5), linewidth=1.0, linestyle='--', color="#595C61", label="_") 
-        ax.plot(ref, np.power(ref,-1.0), linewidth=1.0, linestyle='--', color="#595C61", label="_") 
+            ax.plot(ref, 10 * np.power(ref, -0.5), linewidth=1.0, linestyle="--", color="#595C61", label="_")
+        ax.plot(ref, np.power(ref, -1.0), linewidth=1.0, linestyle="--", color="#595C61", label="_")
 
     for j, mi_name in enumerate(mi_names):
         if mi_name in mi_names_gb:
@@ -61,18 +72,18 @@ def create_plot_general(x, Y, mi_names, munu=False) -> tuple:
         axs[axid].plot(x, y, label=f"{mi_name}".upper(), color=cmap(cmap_idx))
 
         x0 = 1000
-        xl = np.log10(x[y > 0.0]/x0)
+        xl = np.log10(x[y > 0.0] / x0)
         yl = np.log10(y[y > 0.0])
         p = np.polyfit(xl, yl, 1)
         parameters[j, :] = np.array([10 ** p[1], p[0]])
 
         x_ = x
-        y_ = (10 ** p[1]) * ((x_/x0) ** p[0])
+        y_ = (10 ** p[1]) * ((x_ / x0) ** p[0])
         axs[axid].plot(x_, y_, ":", label=f"_{mi_name}".upper(), color=cmap(cmap_idx + 1))
 
     x_ticks = np.array([32, 64, 128, 256, 512, 1024])
     for ax in axs:
-        ax.legend(loc='lower left')
+        ax.legend(loc="lower left")
         ax.set_xlabel("P [-]")
         ax.set_xscale("log", base=2)
         ax.set_xticks(x_ticks**2)
@@ -89,7 +100,7 @@ def create_plot_plateaumean(Ms, list_n_particles_view, mi_names: str):
 
     (axs, parameters) = create_plot_general(list_n_particles_view**2.0, plateaumean, mi_names, True)
 
-    axs[0].set_ylim([1e-6,1e1])
+    axs[0].set_ylim([1e-6, 1e1])
     axs[0].set_yscale("log")
     axs[0].set_ylabel(r"$|1-M_{\infty}$| [-]")
 
@@ -103,7 +114,7 @@ def create_plot_plateaunoise(Ms, list_n_particles_view, mi_names: str):
 
     (axs, parameters) = create_plot_general(list_n_particles_view**2.0, noise, mi_names)
 
-    axs[0].set_ylim([1e-6,1e0])
+    axs[0].set_ylim([1e-6, 1e0])
     axs[0].set_yscale("log")
     axs[0].set_ylabel(r"$\nu_{\infty}$ [-]")
 
@@ -119,9 +130,9 @@ def create_plot_all(Ms, n_particles_plot, mi_names: str):
         plt.figure()
         for i, n_particles in reversed(list(enumerate(n_particles_plot))):
             M = Ms[i, j, :]
-            col = cmap((np.log2(n_particles)-min(np.log2(n_particles_plot))) / (max(np.log2(n_particles_plot))-min(np.log2(n_particles_plot))))
-            n=int(np.log2(n_particles**2))
-            plt.plot(x, M, color=col,label=f"$2^{'{'}{n}{'}'}$")
+            col = cmap((np.log2(n_particles) - min(np.log2(n_particles_plot))) / (max(np.log2(n_particles_plot)) - min(np.log2(n_particles_plot))))
+            n = int(np.log2(n_particles**2))
+            plt.plot(x, M, color=col, label=f"$2^{'{'}{n}{'}'}$")
 
         plt.title(f"{mi_name}".upper())
         plt.ylim([-0.1, 1.1])
@@ -129,6 +140,7 @@ def create_plot_all(Ms, n_particles_plot, mi_names: str):
         plt.xlabel("Normalised iterations [-]")
         plt.ylabel("Mixedness [-]")
         plt.legend()
+
 
 if __name__ == "__main__":
     GENERATE = True
@@ -180,11 +192,11 @@ if __name__ == "__main__":
         # idex_toplot = [0,1,3,7,15]
         # create_plot_all(Ms[idex_toplot,:,:], list_n_particles_view[idex_toplot], mi_names)
 
-        pma = params_mean[:,0]
-        pmb = params_mean[:,1]
-        pna = params_noise[:,0]
-        pnb = params_noise[:,1]
-        params_final = np.array([pma,pmb,pna,pnb])
-        np.savetxt("NPparams.txt",params_final.T)
+        pma = params_mean[:, 0]
+        pmb = params_mean[:, 1]
+        pna = params_noise[:, 0]
+        pnb = params_noise[:, 1]
+        params_final = np.array([pma, pmb, pna, pnb])
+        np.savetxt("NPparams.txt", params_final.T)
 
         plt.show()

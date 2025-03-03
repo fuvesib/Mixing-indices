@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and generates particle positions.
+"""
+
 import comparisonMI.latticeMixing as lm
 import numpy as np
 import os

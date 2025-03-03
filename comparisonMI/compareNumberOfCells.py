@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and generates mixing data and creates figures.
+"""
+
 import comparisonMI.generatePositionData as gpd
 import comparisonMI.wrappers as wp
 import matplotlib.pyplot as plt
@@ -62,13 +73,13 @@ def isoline_coords2(list_n_particles_view, list_n_cells_view, levels=np.logspace
     for i, l in enumerate(levels):
         x_value_l = x_min
         x_value_r = x_max
-        y_value_b = (x_min * l) ** .5
-        y_value_u = (x_max * l) ** .5
+        y_value_b = (x_min * l) ** 0.5
+        y_value_u = (x_max * l) ** 0.5
         if y_value_b < y_min:
-            x_value_l = (y_min ** 2) / l
+            x_value_l = (y_min**2) / l
             y_value_b = y_min
         if y_value_u > y_max:
-            x_value_r = (y_max ** 2) / l
+            x_value_r = (y_max**2) / l
             y_value_u = y_max
         x_pairs[:, i] = [x_value_l, x_value_r]
         y_pairs[:, i] = [y_value_b, y_value_u]
@@ -91,7 +102,7 @@ def make_axis(ax):
 
     ax.set_yscale("log", base=2)
     ax.set_yticks(y_ticks**2)
-    
+
     ax.set_xlabel("S [-]")
     ax.set_ylabel("P [-]")
 
@@ -100,11 +111,11 @@ def create_contourplot_startvalue(Ms, list_n_particles_view, list_n_cells_view, 
     startvalue = Ms[:, :, 0]
 
     levels = [0.0, 0.001, 0.005, 0.01, 0.05, 0.1]
-    colors = ["#bddf26",  "#44bf70", "#21918c", "#355f8d", "#482475"]
+    colors = ["#bddf26", "#44bf70", "#21918c", "#355f8d", "#482475"]
     cbar_ticklabels = list((str(x) for x in levels))
     cbar_ticklabels[-1] = ">" + cbar_ticklabels[-1]
 
-    startvalue_ = np.clip(np.abs(0-startvalue), min(levels), max(levels))
+    startvalue_ = np.clip(np.abs(0 - startvalue), min(levels), max(levels))
     (X, Y, startvalue_) = XY_maskeddata(list_n_particles_view, list_n_cells_view, startvalue_)
 
     fig, ax = plt.subplots(figsize=(8, 4), dpi=100)
@@ -123,11 +134,11 @@ def create_contourplot_plateaumean(Ms, list_n_particles_view, list_n_cells_view,
     plateau_mean = np.mean(Ms[:, :, PLATEAUIDX:], axis=2)
 
     levels = [0.0, 0.001, 0.005, 0.01, 0.05, 0.1]
-    colors = ["#bddf26",  "#44bf70", "#21918c", "#355f8d", "#482475"]
+    colors = ["#bddf26", "#44bf70", "#21918c", "#355f8d", "#482475"]
     cbar_ticklabels = list((str(x) for x in levels))
     cbar_ticklabels[-1] = ">" + cbar_ticklabels[-1]
 
-    plateau_mean_ = np.clip(np.abs(1-plateau_mean), min(levels), max(levels))
+    plateau_mean_ = np.clip(np.abs(1 - plateau_mean), min(levels), max(levels))
     (X, Y, plateau_mean_) = XY_maskeddata(list_n_particles_view, list_n_cells_view, plateau_mean_)
 
     fig, ax = plt.subplots(figsize=(8, 4), dpi=100)
@@ -136,8 +147,8 @@ def create_contourplot_plateaumean(Ms, list_n_particles_view, list_n_cells_view,
     col = "#FF7F0E"
     (x_pairs, y_pairs) = isoline_coords(list_n_particles_view, list_n_cells_view)
     for i in range(x_pairs.shape[1]):
-        label = r"$10^"+f"{i}"+r"$"
-        if (i == 0):
+        label = r"$10^" + f"{i}" + r"$"
+        if i == 0:
             label = r"n=" + label
         plt.plot(x_pairs[:, i], y_pairs[:, i], "k-", linewidth=1, alpha=0.5)
         ax.text(x_pairs[0, i], y_pairs[0, i] * 1.2, label, size="small", rotation=31)
@@ -182,7 +193,7 @@ def create_contourplot_transientslope(Ms, list_n_particles_view, list_n_cells_vi
         levels_set = True
 
     if levels_set:
-        colors = ["#bddf26",  "#44bf70", "#21918c", "#355f8d", "#482475"]
+        colors = ["#bddf26", "#44bf70", "#21918c", "#355f8d", "#482475"]
         cbar_ticklabels = list((str(x) for x in levels))
         cbar_ticklabels[-1] = ">" + cbar_ticklabels[-1]
         cbar_ticklabels[0] = "<" + cbar_ticklabels[0]
@@ -198,8 +209,8 @@ def create_contourplot_transientslope(Ms, list_n_particles_view, list_n_cells_vi
 
     (x_pairs, y_pairs) = isoline_coords(list_n_particles_view, list_n_cells_view)
     for i in range(x_pairs.shape[1]):
-        label = r"$10^"+f"{i}"+r"$"
-        if (i == 0):
+        label = r"$10^" + f"{i}" + r"$"
+        if i == 0:
             label = r"n=" + label
         plt.plot(x_pairs[:, i], y_pairs[:, i], "k-", linewidth=1, alpha=0.5)
         ax.text(x_pairs[0, i], y_pairs[0, i] * 1.2, label, size="small", rotation=31)
@@ -235,8 +246,8 @@ def create_contourplot_plateaunoise(Ms, list_n_particles_view, list_n_cells_view
 
     (x_pairs, y_pairs) = isoline_coords2(list_n_particles_view, list_n_cells_view)
     for i in range(x_pairs.shape[1]):
-        label = r"$10^{"+f"{i+3}"+r"}$"
-        if (i == 0):
+        label = r"$10^{" + f"{i+3}" + r"}$"
+        if i == 0:
             label = r"nP=" + label
         plt.plot(x_pairs[:, i], y_pairs[:, i], "k-", linewidth=1, alpha=0.5)
         ax.text(x_pairs[0, i], y_pairs[0, i] * 1.2, label, size="small", rotation=31)

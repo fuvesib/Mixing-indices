@@ -1,3 +1,19 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script implements various mixing indices for evaluating particulate mixing.
+
+To evaluate an index on particulate data:
+Import its corresponding class and initialise it with the constructor.
+Call the 'iterate' method for each timestep.
+At the end, call the 'get_M' method to retrieve the mixing index values for each iteration as a NumPy array.
+"""
+
 import numpy
 import warnings
 from sklearn.neighbors import NearestNeighbors
@@ -1033,38 +1049,3 @@ class SphereSpreadingMethod(MixingIndex):
         self._iteration += 1
 
         return M
-
-
-## Continuoum based methods
-
-
-class NewIndex(MixingIndex):
-    """New index."""
-
-    def __init__(self):
-        """Initialise the mixing index."""
-
-        self._M = list()
-        self._iteration = 0
-        self._runtime = 0.0
-
-    def _calculate(self, cai: numpy.ndarray, ca: float, Nsample: int) -> float:
-        sigmas = numpy.sum(numpy.divide(numpy.power(cai - ca, 2), Nsample - 1))
-        sigma0s = ca * (1 - ca)
-        if (sigma0s) == 0.0:
-            return -1.0
-        M = (sigmas - sigma0s) / (-sigma0s)
-
-        return M
-
-    def iterate(self, cai: numpy.ndarray, ca: float, Nsample: int) -> float:
-        time_start = time.time()
-        M = self._calculate(cai, ca, Nsample)
-        self._M.append(M)
-        self._iteration += 1
-
-        self._runtime += time.time() - time_start
-        return M
-
-    def get_M(self) -> numpy.ndarray:
-        return numpy.squeeze(numpy.array(self._M))

@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and generates mixing data and creates figures.
+"""
+
 import comparisonMI.generatePositionData as gpd
 import comparisonMI.wrappers as wp
 import matplotlib.pyplot as plt
@@ -43,21 +54,21 @@ def create_plot_general(x, Y, mi_names, is_mean) -> tuple:
 
     cmap = matplotlib.colormaps["tab20"]
 
-    ref = [0.1,1.0]
+    ref = [0.1, 1.0]
     if is_mean:
         a1 = 1e-1
         a2 = 1e-6
-        axs[0].text(0.6, a1*0.6**(-0.5), r"$10^{-1}x^{-1/2}$")
-        axs[0].text(0.6, a2*0.6**(-1.0), r"$10^{-6}x^{-1}$")
+        axs[0].text(0.6, a1 * 0.6 ** (-0.5), r"$10^{-1}x^{-1/2}$")
+        axs[0].text(0.6, a2 * 0.6 ** (-1.0), r"$10^{-6}x^{-1}$")
     else:
         a1 = 1e-2
         a2 = 1e-5
-        axs[0].text(0.6, a1*0.6**(-0.5), r"$10^{-2}x^{-1/2}$")
-        axs[0].text(0.6, a2*0.6**(-1.0), r"$10^{-5}x^{-1}$")
+        axs[0].text(0.6, a1 * 0.6 ** (-0.5), r"$10^{-2}x^{-1/2}$")
+        axs[0].text(0.6, a2 * 0.6 ** (-1.0), r"$10^{-5}x^{-1}$")
 
     for ax in axs:
-        ax.plot(ref, a1*np.power(ref,-0.5), linewidth=1.0, linestyle='--', color="#595C61", label="_")
-        ax.plot(ref, a2*np.power(ref,-1.0), linewidth=1.0, linestyle='--', color="#595C61", label="_")
+        ax.plot(ref, a1 * np.power(ref, -0.5), linewidth=1.0, linestyle="--", color="#595C61", label="_")
+        ax.plot(ref, a2 * np.power(ref, -1.0), linewidth=1.0, linestyle="--", color="#595C61", label="_")
 
     for j, mi_name in enumerate(mi_names):
         if mi_name in mi_names_gb:
@@ -74,17 +85,17 @@ def create_plot_general(x, Y, mi_names, is_mean) -> tuple:
         axs[axid].plot(x, y, label=f"{mi_name}".upper(), color=cmap(cmap_idx))
 
         x0 = 0.1
-        xl = np.log10(x[y > 0.0]/x0)
+        xl = np.log10(x[y > 0.0] / x0)
         yl = np.log10(y[y > 0.0])
         p = np.polyfit(xl, yl, 1)
         parameters[j, :] = np.array([10 ** p[1], p[0]])
 
         x_ = x
-        y_ = (10 ** p[1]) * ((x_/x0) ** p[0])
+        y_ = (10 ** p[1]) * ((x_ / x0) ** p[0])
         axs[axid].plot(x_, y_, ":", label=f"_{mi_name}".upper(), color=cmap(cmap_idx + 1))
 
     for ax in axs:
-        ax.legend(loc='lower left')
+        ax.legend(loc="lower left")
         ax.set_xlabel("Solid fraction [-]")
         ax.set_xscale("log")
 
@@ -100,7 +111,7 @@ def create_plot_plateaumean(Ms, fractions, mi_names: str):
 
     (axs, parameters) = create_plot_general(fractions, plateaumean, mi_names, True)
 
-    axs[0].set_ylim([1e-7,1e0])
+    axs[0].set_ylim([1e-7, 1e0])
     axs[0].set_yscale("log")
     axs[0].set_ylabel(r"$|1-M_{\infty}$| [-]")
 
@@ -114,7 +125,7 @@ def create_plot_plateaunoise(Ms, fractions, mi_names: str):
 
     (axs, parameters) = create_plot_general(fractions, noise, mi_names, False)
 
-    axs[0].set_ylim([1e-6,5e-2])
+    axs[0].set_ylim([1e-6, 5e-2])
     axs[0].set_yscale("log")
     axs[0].set_ylabel(r"$\nu_{\infty}$ [-]")
 
@@ -130,7 +141,7 @@ def create_plot_all(Ms, fractions, mi_names: str):
         plt.figure()
         for i, fraction in enumerate(fractions):
             M = Ms[i, j, :]
-            plt.plot(x, M, color=cmap(fraction),label=f"{fraction:.2}")
+            plt.plot(x, M, color=cmap(fraction), label=f"{fraction:.2}")
 
         plt.title(f"{mi_name}".upper())
         plt.ylim([-0.1, 1.1])
@@ -193,11 +204,11 @@ if __name__ == "__main__":
 
         # create_plot_all(Ms[0:19:2,:,:], list_fractions_view[0:19:2], mi_names)
 
-        pma = params_mean[:,0]
-        pmb = params_mean[:,1]
-        pna = params_noise[:,0]
-        pnb = params_noise[:,1]
-        params_final = np.array([pma,pmb,pna,pnb])
-        np.savetxt("SFparams.txt",params_final.T)
-        
+        pma = params_mean[:, 0]
+        pmb = params_mean[:, 1]
+        pna = params_noise[:, 0]
+        pnb = params_noise[:, 1]
+        params_final = np.array([pma, pmb, pna, pnb])
+        np.savetxt("SFparams.txt", params_final.T)
+
         plt.show()

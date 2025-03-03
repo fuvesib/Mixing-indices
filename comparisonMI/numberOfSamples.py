@@ -1,3 +1,14 @@
+"""
+Mixing Indices - Part of the open-access article:
+"Mixing indices in up-scaled simulations" (Powder Technology, 2025)
+DOI: https://doi.org/10.1016/j.powtec.2025.120775
+
+Author: Balázs Füvesi
+License: GPT3 - Please cite the original article if used.
+
+This script is for the article and creates figures.
+"""
+
 from scipy.stats import chi2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,19 +28,19 @@ u = np.sqrt(u)
 l_ = np.sqrt(l_)
 u_ = np.sqrt(u_)
 
-fig = plt.figure(figsize=[8,4])
+fig = plt.figure(figsize=[8, 4])
 ax = fig.add_subplot(1, 1, 1)
-ax.plot(df,u_,label="",color="#44bf70")
-ax.plot(df,l_,label="Limits of confidence level 99%",color="#44bf70")
-ax.plot(df,u,label="",color="#482475")
-ax.plot(df,l,label="Limits of confidence level 95%",color="#482475")
+ax.plot(df, u_, label="", color="#44bf70")
+ax.plot(df, l_, label="Limits of confidence level 99%", color="#44bf70")
+ax.plot(df, u, label="", color="#482475")
+ax.plot(df, l, label="Limits of confidence level 95%", color="#482475")
 
-ax.set_xscale('log', base=2)
-ax.set_ylim([0,2])
+ax.set_xscale("log", base=2)
+ax.set_ylim([0, 2])
 ax.set_xlabel("S [-]")
-ax.set_ylabel(r'$\sqrt{\sigma_{true}^2/\sigma^2}$ [-]')
+ax.set_ylabel(r"$\sqrt{\sigma_{true}^2/\sigma^2}$ [-]")
 plt.title(r"Confidence level limits of $\sqrt{\sigma_{true}^2/\sigma^2}$")
-plt.legend(loc='lower right')
+plt.legend(loc="lower right")
 plt.grid(True)
 plt.savefig(f"NoC_confidence.png", dpi=600)
 
