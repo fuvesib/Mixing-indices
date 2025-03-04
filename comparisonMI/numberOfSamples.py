@@ -4,7 +4,7 @@ Mixing Indices - Part of the open-access article:
 DOI: https://doi.org/10.1016/j.powtec.2025.120775
 
 Author: Balázs Füvesi
-License: GPT3 - Please cite the original article if used.
+License: GPL3 - Please cite the original article if used.
 
 This script is for the article and creates figures.
 """

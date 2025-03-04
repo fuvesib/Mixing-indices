@@ -43,9 +43,9 @@ To generate the figures in the sections run the following scripts:
 Ensure the following Python libraries are installed:
 
 - `numpy`
+- `scikit-learn` _(only used for some indices)_
+- `scipy` _(only used for some indices)_
 - `matplotlib` _(only required for generating figures from the article)_
-- `scikit-learn` _(only used in specific indices)_
-- `scipy` _(only used in specific indices)_
 
 ## Citation
 
